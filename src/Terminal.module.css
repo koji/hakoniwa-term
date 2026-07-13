@@ -1,0 +1,156 @@
+.terminalRoot {
+  width: 100%;
+  max-width: 56rem;
+  background-color: rgba(9, 10, 15, 0.95);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  border-radius: 0.5rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 0.875rem;
+  color: rgba(52, 211, 153, 0.9);
+  position: relative;
+  z-index: 10;
+  backdrop-filter: blur(12px);
+}
+
+.titleBar {
+  background-color: #0e1017;
+  border-bottom: 1px solid rgba(16, 185, 129, 0.2);
+  padding: 0.625rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  user-select: none;
+}
+
+.titleLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.titleText {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: #9ca3af;
+}
+
+.titleRight {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.closeButton {
+  padding: 0.125rem;
+  border: none;
+  background: transparent;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  color: #ef4444;
+  display: flex;
+  align-items: center;
+}
+
+.closeButton:hover {
+  background-color: rgba(239, 68, 68, 0.2);
+}
+
+.contentBox {
+  height: 24rem;
+  overflow-y: auto;
+  padding: 1.25rem;
+}
+
+.contentBox::-webkit-scrollbar {
+  width: 6px;
+}
+.contentBox::-webkit-scrollbar-thumb {
+  background-color: rgba(16, 185, 129, 0.1);
+  border-radius: 3px;
+}
+
+.logRow {
+  white-space: pre-wrap;
+  line-height: 1.625;
+  margin-bottom: 0.625rem;
+}
+
+.logInput { color: #f3f4f6; font-weight: 600; }
+.logError { color: #f87171; }
+.logSuccess { color: #6ee7b7; font-weight: 700; }
+.logOutput { color: rgba(52, 211, 153, 0.8); }
+
+.progressBarContainer {
+  padding: 0.5rem 0;
+}
+
+.progressHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: #9ca3af;
+  margin-bottom: 0.25rem;
+}
+
+.progressTrack {
+  width: 100%;
+  background-color: rgba(6, 78, 59, 0.4);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  height: 0.5rem;
+  border-radius: 0.25rem;
+  overflow: hidden;
+}
+
+.progressBar {
+  background-color: #10b981;
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+.inputForm {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(16, 185, 129, 0.1);
+}
+
+.prompt {
+  color: #10b981;
+  font-weight: 700;
+}
+
+.inputField {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #f3f4f6;
+  font-size: 0.875rem;
+  padding: 0;
+  font-family: inherit;
+}
+
+.inputField::placeholder {
+  color: rgba(156, 163, 175, 0.5);
+}
+
+.submitButton {
+  border: none;
+  background: transparent;
+  color: rgba(16, 185, 129, 0.5);
+  cursor: pointer;
+  transition: color 0.2s;
+  display: flex;
+  align-items: center;
+}
+
+.submitButton:hover {
+  color: #34d399;
+}
