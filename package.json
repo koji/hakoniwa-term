@@ -1,6 +1,6 @@
 {
   "name": "hakoniwa-term",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A robust, pluggable retro terminal engine for React, powered by CSS Modules and Async Generators.",
   "author": "koji <baxin1919@gmail.com>",
   "homepage": "https://github.com/koji/hakoniwa-term",
