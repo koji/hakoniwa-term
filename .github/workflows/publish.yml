@@ -32,7 +32,6 @@ jobs:
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: "22.22.0"
-          registry-url: "https://registry.npmjs.org"
           cache: "pnpm"
 
       - name: Install dependencies
@@ -88,11 +87,9 @@ jobs:
           TARBALL_SIZE=$(npm pack --dry-run --json 2>/dev/null | node -p "JSON.parse(require('fs').readFileSync('/dev/stdin','utf8'))[0]?.size || 'unknown'")
           echo "📊 Package size: $TARBALL_SIZE bytes"
 
-      - name: Publish to npm
+      - name: Publish to npm (Trusted Publishing / OIDC)
         if: ${{ !(github.event_name == 'workflow_dispatch' && inputs.dry-run) }}
         run: npm publish --access public --provenance
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Verify publication
         if: ${{ !(github.event_name == 'workflow_dispatch' && inputs.dry-run) }}
