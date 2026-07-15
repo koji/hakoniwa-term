@@ -1,5 +1,5 @@
 {
-  "name": "kuro-gamen",
+  "name": "hakoniwa-term",
   "version": "0.0.1",
   "description": "A robust, pluggable retro terminal engine for React, powered by CSS Modules and Async Generators.",
   "main": "./dist/index.cjs",
