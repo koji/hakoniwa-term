@@ -90,7 +90,11 @@ jobs:
 
       - name: Publish to npm (Trusted Publishing / OIDC)
         if: ${{ !(github.event_name == 'workflow_dispatch' && inputs.dry-run) }}
-        run: npm publish --access public --provenance
+        run: |
+          rm -f .npmrc
+          rm -f ~/.npmrc
+          unset NODE_AUTH_TOKEN
+          npm publish --access public --provenance
 
       - name: Verify publication
         if: ${{ !(github.event_name == 'workflow_dispatch' && inputs.dry-run) }}
