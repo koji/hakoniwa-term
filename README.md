@@ -8,3 +8,6 @@ Originally it refers to a small, self‑contained miniature garden or landscape 
 
 ## screenshot
 ![screenshot](resources/screenshot_hakoniwa_term.png)
+
+## sample
+codesandbox: https://codesandbox.io/p/sandbox/my9kn2
