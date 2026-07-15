@@ -88,9 +88,11 @@ jobs:
           TARBALL_SIZE=$(npm pack --dry-run --json 2>/dev/null | node -p "JSON.parse(require('fs').readFileSync('/dev/stdin','utf8'))[0]?.size || 'unknown'")
           echo "📊 Package size: $TARBALL_SIZE bytes"
 
-      - name: Publish to npm (Trusted Publishing / OIDC)
+      - name: Publish to npm
         if: ${{ !(github.event_name == 'workflow_dispatch' && inputs.dry-run) }}
-        run: pnpm publish --no-git-checks --access public --provenance
+        run: pnpm publish --no-git-checks --provenance
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Verify publication
         if: ${{ !(github.event_name == 'workflow_dispatch' && inputs.dry-run) }}
