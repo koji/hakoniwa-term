@@ -29,9 +29,18 @@ jobs:
           node-version: "22.22.0"
           cache: "pnpm"
 
-      - run: |
-          npm --version
-          node --version
+      - name: Debug npm auth
+        run: |
+          echo "Node: $(node -v)"
+          echo "npm:  $(npm -v)"
+          echo "NPM_CONFIG_USERCONFIG=$NPM_CONFIG_USERCONFIG"
+
+          ls -la "$NPM_CONFIG_USERCONFIG" || true
+
+          echo "===== .npmrc ====="
+          cat "$NPM_CONFIG_USERCONFIG" || true
+
+          echo "===== whoami ====="
           npm whoami
 
       - name: Install dependencies
