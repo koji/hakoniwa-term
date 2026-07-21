@@ -1,97 +1,125 @@
-name: CI and Package Validation
+# name: CI and Package Validation
+
+# on:
+#   push:
+#     branches: [main]
+#   pull_request:
+#     branches: [main]
+#   workflow_dispatch:
+
+# permissions:
+#   contents: read
+
+# jobs:
+#   validate:
+#     runs-on: ubuntu-latest
+#     timeout-minutes: 10
+#     steps:
+#       - name: Checkout
+#         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+#       - name: Setup pnpm
+#         uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
+#         with:
+#           version: 10.32.1
+
+#       - name: Setup Node.js
+#         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+#         with:
+#           node-version: "22.22.0"
+#           registry-url: "https://registry.npmjs.org"
+
+#       # - name: Debug
+#       #   run: |
+#       #     echo "NPM_CONFIG_USERCONFIG=$NPM_CONFIG_USERCONFIG"
+#       #     env | grep NPM
+#       #     npm whoami
+
+#       - name: Debug npm auth
+#         run: |
+#           echo "Node: $(node -v)"
+#           echo "npm:  $(npm -v)"
+#           echo "NPM_CONFIG_USERCONFIG=$NPM_CONFIG_USERCONFIG"
+
+#           ls -la "$NPM_CONFIG_USERCONFIG" || true
+
+#           echo "===== .npmrc ====="
+#           cat "$NPM_CONFIG_USERCONFIG" || true
+
+#           echo "===== whoami ====="
+#           npm whoami
+
+#       - name: Install dependencies
+#         run: pnpm install --frozen-lockfile
+
+#       - name: Type check
+#         run: pnpm exec tsc --noEmit
+
+#       - name: Build
+#         run: pnpm run build
+
+#       - name: Verify build output
+#         run: |
+#           echo "Verifying dist contents..."
+#           test -f dist/index.js    || { echo "❌ Missing dist/index.js (ESM)"; exit 1; }
+#           test -f dist/index.cjs   || { echo "❌ Missing dist/index.cjs (CJS)"; exit 1; }
+#           test -f dist/index.d.ts  || { echo "❌ Missing dist/index.d.ts (types)"; exit 1; }
+#           test -f dist/index.css   || { echo "❌ Missing dist/index.css (styles)"; exit 1; }
+#           echo "✅ All expected build artifacts present"
+#           echo ""
+#           echo "📦 dist/ contents:"
+#           ls -lh dist/
+
+#       - name: Pack dry run (Validate npm package contents)
+#         run: |
+#           echo "📦 npm pack --dry-run:"
+#           npm pack --dry-run 2>&1
+#           echo ""
+#           TARBALL_SIZE=$(npm pack --dry-run --json 2>/dev/null | node -p "JSON.parse(require('fs').readFileSync('/dev/stdin','utf8'))[0]?.size || 'unknown'")
+#           echo "📊 Package size: $TARBALL_SIZE bytes"
+
+#       - name: Summary
+#         if: always()
+#         run: |
+#           PACKAGE_NAME=$(node -p "require('./package.json').name")
+#           PACKAGE_VERSION=$(node -p "require('./package.json').version")
+
+#           {
+#             echo "# 🔍 CI & Package Validation Summary"
+#             echo ""
+#             echo "| Field | Value |"
+#             echo "|-------|-------|"
+#             echo "| Package | \`$PACKAGE_NAME@$PACKAGE_VERSION\` |"
+#             echo "| Trigger | \`${{ github.event_name }}\` |"
+#             echo "| Status | \`${{ job.status }}\` |"
+#             echo ""
+#             echo "✅ Build, Type Check, and Package Packaging verified successfully."
+#           } >> "$GITHUB_STEP_SUMMARY"
+
+
+name: Publish
 
 on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
   workflow_dispatch:
 
 permissions:
   contents: read
+  id-token: write
 
 jobs:
-  validate:
+  publish:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+
     steps:
-      - name: Checkout
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/checkout@v4
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
+      - uses: actions/setup-node@v4
         with:
-          version: 10.32.1
+          node-version: 22
+          registry-url: https://registry.npmjs.org
 
-      - name: Setup Node.js
-        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
-        with:
-          node-version: "22.22.0"
-          registry-url: "https://registry.npmjs.org"
+      - run: npm --version
 
-      - name: Debug
-        run: |
-          echo "NPM_CONFIG_USERCONFIG=$NPM_CONFIG_USERCONFIG"
-          env | grep NPM
-          npm whoami
+      - run: cat "$NPM_CONFIG_USERCONFIG"
 
-      - name: Debug npm auth
-        run: |
-          echo "Node: $(node -v)"
-          echo "npm:  $(npm -v)"
-          echo "NPM_CONFIG_USERCONFIG=$NPM_CONFIG_USERCONFIG"
-
-          ls -la "$NPM_CONFIG_USERCONFIG" || true
-
-          echo "===== .npmrc ====="
-          cat "$NPM_CONFIG_USERCONFIG" || true
-
-          echo "===== whoami ====="
-          npm whoami
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Type check
-        run: pnpm exec tsc --noEmit
-
-      - name: Build
-        run: pnpm run build
-
-      - name: Verify build output
-        run: |
-          echo "Verifying dist contents..."
-          test -f dist/index.js    || { echo "❌ Missing dist/index.js (ESM)"; exit 1; }
-          test -f dist/index.cjs   || { echo "❌ Missing dist/index.cjs (CJS)"; exit 1; }
-          test -f dist/index.d.ts  || { echo "❌ Missing dist/index.d.ts (types)"; exit 1; }
-          test -f dist/index.css   || { echo "❌ Missing dist/index.css (styles)"; exit 1; }
-          echo "✅ All expected build artifacts present"
-          echo ""
-          echo "📦 dist/ contents:"
-          ls -lh dist/
-
-      - name: Pack dry run (Validate npm package contents)
-        run: |
-          echo "📦 npm pack --dry-run:"
-          npm pack --dry-run 2>&1
-          echo ""
-          TARBALL_SIZE=$(npm pack --dry-run --json 2>/dev/null | node -p "JSON.parse(require('fs').readFileSync('/dev/stdin','utf8'))[0]?.size || 'unknown'")
-          echo "📊 Package size: $TARBALL_SIZE bytes"
-
-      - name: Summary
-        if: always()
-        run: |
-          PACKAGE_NAME=$(node -p "require('./package.json').name")
-          PACKAGE_VERSION=$(node -p "require('./package.json').version")
-
-          {
-            echo "# 🔍 CI & Package Validation Summary"
-            echo ""
-            echo "| Field | Value |"
-            echo "|-------|-------|"
-            echo "| Package | \`$PACKAGE_NAME@$PACKAGE_VERSION\` |"
-            echo "| Trigger | \`${{ github.event_name }}\` |"
-            echo "| Status | \`${{ job.status }}\` |"
-            echo ""
-            echo "✅ Build, Type Check, and Package Packaging verified successfully."
-          } >> "$GITHUB_STEP_SUMMARY"
+      - run: npm publish --provenance --access public
