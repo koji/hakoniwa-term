@@ -98,17 +98,6 @@ jobs:
           echo "Running npm pack --dry-run..."
           npm pack --dry-run
 
-          echo ""
-          echo "Package statistics"
-
-          npm pack --dry-run --json \
-            | node -e '
-              const p=JSON.parse(require("fs").readFileSync(0,"utf8"))[0];
-              console.log(`Size: ${p.size} bytes`);
-              console.log(`Unpacked: ${p.unpackedSize} bytes`);
-              console.log(`Files: ${p.files.length}`);
-            '
-
       - name: Publish to npm
         if: ${{ !(github.event_name == 'workflow_dispatch' && inputs.dry-run) }}
         run: npm publish --access public --provenance
