@@ -1,4 +1,8 @@
 node_modules
 dist
 .DS_Store
-example/node_modules
+
+# node_modules
+example/codesandbox/node_modules
+example/hakoniwa-sample-1/node_modules
+example/hakoniwa-sample-2/node_modules
