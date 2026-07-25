@@ -20,6 +20,9 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    permissions:
+      contents: read
+      id-token: write
 
     steps:
       - name: Checkout
@@ -36,6 +39,9 @@ jobs:
           node-version: 22
           registry-url: https://registry.npmjs.org
           cache: pnpm
+
+      - name: Upgrade npm
+        run: npm install -g npm@latest
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -91,17 +97,6 @@ jobs:
         run: |
           echo "Running npm pack --dry-run..."
           npm pack --dry-run
-
-          echo ""
-          echo "Package statistics"
-
-          npm pack --dry-run --json \
-            | node -e '
-              const p=JSON.parse(require("fs").readFileSync(0,"utf8"))[0];
-              console.log(`Size: ${p.size} bytes`);
-              console.log(`Unpacked: ${p.unpackedSize} bytes`);
-              console.log(`Files: ${p.files.length}`);
-            '
 
       - name: Publish to npm
         if: ${{ !(github.event_name == 'workflow_dispatch' && inputs.dry-run) }}

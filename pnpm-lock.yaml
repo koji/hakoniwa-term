@@ -8,9 +8,6 @@ importers:
 
   .:
     dependencies:
-      hakoniwa-term:
-        specifier: ^0.0.3
-        version: 0.0.3(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       lucide-react:
         specifier: ^0.470.0
         version: 0.470.0(react@19.2.7)
@@ -652,12 +649,6 @@ packages:
 
   graceful-fs@4.2.11:
     resolution: {integrity: sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==}
-
-  hakoniwa-term@0.0.3:
-    resolution: {integrity: sha512-INmK+heEQi2lom9wljShDaij6z9LEE84K2+nEeAqXjQqRoWrN2ui5wcVLKh9NT1exWIL0eWSXVrV93h+XQAKzg==}
-    peerDependencies:
-      react: ^18.0.0 || ^19.0.0
-      react-dom: ^18.0.0 || ^19.0.0
 
   has-flag@4.0.0:
     resolution: {integrity: sha512-EykJT/Q1KjTWctppgIAgfSO0tKVuZUjhgMr17kqTumMl6Afv3EISleU7qZUzoXDFTAHTDC4NOoG/ZxU3EvlMPQ==}
@@ -1556,12 +1547,6 @@ snapshots:
   gensync@1.0.0-beta.2: {}
 
   graceful-fs@4.2.11: {}
-
-  hakoniwa-term@0.0.3(react-dom@19.2.7(react@19.2.7))(react@19.2.7):
-    dependencies:
-      lucide-react: 0.470.0(react@19.2.7)
-      react: 19.2.7
-      react-dom: 19.2.7(react@19.2.7)
 
   has-flag@4.0.0: {}
 
