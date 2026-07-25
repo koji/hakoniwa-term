@@ -155,6 +155,8 @@ const commands: Record<string, CommandAction> = {
 };
 ```
 
+https://github.com/user-attachments/assets/0f8c887e-9dc0-427f-a12d-585485da3266
+
 ---
 
 ## 🎛️ Component API (`TerminalProps`)
