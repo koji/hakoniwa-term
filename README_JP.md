@@ -62,7 +62,8 @@ yarn add hakoniwa-term lucide-react
 
 ```tsx
 import React from 'react';
-import { Terminal, CommandAction } from 'hakoniwa-term';
+import { Terminal } from 'hakoniwa-term';
+import type { CommandAction } from 'hakoniwa-term';
 import 'hakoniwa-term/dist/index.css';
 
 export default function App() {
@@ -111,7 +112,8 @@ export default function App() {
 ### 例: プログレスバー付きのマルチステップ非同期コマンド
 
 ```tsx
-import { Terminal, CommandAction } from 'hakoniwa-term';
+import { Terminal } from 'hakoniwa-term';
+import type { CommandAction } from 'hakoniwa-term';
 import 'hakoniwa-term/dist/index.css';
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
