@@ -1,6 +1,6 @@
 {
   "name": "hakoniwa-term",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "A robust, pluggable retro terminal engine for React, powered by CSS Modules and Async Generators.",
   "author": "koji <baxin1919@gmail.com>",
   "homepage": "https://github.com/koji/hakoniwa-term",
@@ -33,6 +33,7 @@
     "lucide-react": "^0.470.0"
   },
   "devDependencies": {
+    "@types/node": "^26.2.0",
     "@types/react": "^19.0.0",
     "@vitejs/plugin-react": "^4.3.0",
     "typescript": "^5.9.3",
