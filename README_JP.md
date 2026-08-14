@@ -137,6 +137,9 @@ export default function App() {
 
 ## 🧪 例: `hakoniwa-sample-3`
 
+https://github.com/user-attachments/assets/14330583-4141-4269-a055-b41c94f8addb
+
+
 `example/hakoniwa-sample-3` には、プリセット切り替えとカスタムテーマを操作できるインタラクティブなサンプルを収録しています。ターミナルでは次のコマンドを実行できます。
 
 - `help` — 利用可能なコマンドを表示
