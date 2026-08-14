@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { Terminal as TerminalIcon, CornerDownLeft, X } from 'lucide-react';
 import styles from './Terminal.module.css';
 
@@ -13,6 +13,91 @@ export type YieldChunk =
 
 export type CommandAction = (args: string[]) => AsyncGenerator<YieldChunk, void, unknown>;
 
+/**
+ * ターミナルのカラーテーマのインターフェース（主要8色）
+ */
+export interface TerminalTheme {
+  bg: string;
+  titleBg: string;
+  border: string;
+  text: string;
+  prompt: string;
+  error: string;
+  success: string;
+  progress: string;
+}
+
+/**
+ * 組み込みプリセットの識別名
+ */
+export type TerminalPreset = 'emerald' | 'matrix' | 'dracula' | 'amber' | 'cyberpunk' | 'light';
+
+/**
+ * 組み込みプリセット定義
+ */
+export const TERMINAL_PRESETS: Record<TerminalPreset, TerminalTheme> = {
+  emerald: {
+    bg: 'rgba(9, 10, 15, 0.95)',
+    titleBg: '#0e1017',
+    border: 'rgba(16, 185, 129, 0.3)',
+    text: 'rgba(52, 211, 153, 0.9)',
+    prompt: '#10b981',
+    error: '#f87171',
+    success: '#6ee7b7',
+    progress: '#10b981',
+  },
+  matrix: {
+    bg: '#000000',
+    titleBg: '#051105',
+    border: '#00ff41',
+    text: '#00ff41',
+    prompt: '#00ff41',
+    error: '#ff0033',
+    success: '#00ff41',
+    progress: '#00ff41',
+  },
+  dracula: {
+    bg: '#282a36',
+    titleBg: '#21222c',
+    border: '#6272a4',
+    text: '#f8f8f2',
+    prompt: '#50fa7b',
+    error: '#ff5555',
+    success: '#50fa7b',
+    progress: '#bd93f9',
+  },
+  amber: {
+    bg: '#1a0f00',
+    titleBg: '#2b1a00',
+    border: '#ffb000',
+    text: '#ffb000',
+    prompt: '#ffc107',
+    error: '#ff5252',
+    success: '#ffb000',
+    progress: '#ffb000',
+  },
+  cyberpunk: {
+    bg: '#0d0f18',
+    titleBg: '#16192b',
+    border: '#00f0ff',
+    text: '#00f0ff',
+    prompt: '#ffe600',
+    error: '#ff0055',
+    success: '#00ff9f',
+    progress: '#ff0055',
+  },
+  light: {
+    bg: '#ffffff',
+    titleBg: '#f3f4f6',
+    border: '#e5e7eb',
+    text: '#1f2937',
+    prompt: '#059669',
+    error: '#dc2626',
+    success: '#059669',
+    progress: '#059669',
+  },
+};
+
 export interface TerminalProps {
   promptString?: string;
   placeholder?: string;
@@ -24,6 +109,10 @@ export interface TerminalProps {
   showCloseButton?: boolean;
   onClose?: () => void;
   headerRightActions?: React.ReactNode;
+  /** プリセットテーマ指定 */
+  preset?: TerminalPreset;
+  /** カスタムテーマによる部分オーバーライド */
+  theme?: Partial<TerminalTheme>;
 }
 
 export default function Terminal({
@@ -37,6 +126,8 @@ export default function Terminal({
   showCloseButton = true,
   onClose,
   headerRightActions,
+  preset = 'emerald',
+  theme,
 }: TerminalProps) {
   const [input, setInput] = useState('');
   const [history, setHistory] = useState<CommandLog[]>(initialHistory);
@@ -47,6 +138,23 @@ export default function Terminal({
 
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // プリセットとカスタムthemeのマージによるCSS変数の動的注入計算
+  const dynamicStyles = useMemo(() => {
+    const baseTheme = TERMINAL_PRESETS[preset] || TERMINAL_PRESETS.emerald;
+    const finalTheme = { ...baseTheme, ...theme };
+
+    return {
+      '--terminal-bg': finalTheme.bg,
+      '--terminal-title-bg': finalTheme.titleBg,
+      '--terminal-border': finalTheme.border,
+      '--terminal-text': finalTheme.text,
+      '--terminal-prompt': finalTheme.prompt,
+      '--terminal-error': finalTheme.error,
+      '--terminal-success': finalTheme.success,
+      '--terminal-progress': finalTheme.progress,
+    } as React.CSSProperties;
+  }, [preset, theme]);
 
   useEffect(() => {
     if (containerRef.current) {
@@ -110,16 +218,26 @@ export default function Terminal({
   };
 
   return (
-    <div className={styles.terminalRoot} onClick={handleTerminalClick}>
+    <div
+      className={styles.terminalRoot}
+      style={dynamicStyles}
+      onClick={handleTerminalClick}
+    >
       <div className={styles.titleBar}>
         <div className={styles.titleLeft}>
-          <TerminalIcon className="w-4 h-4" style={{ color: '#10b981' }} />
+          <TerminalIcon className="w-4 h-4" style={{ color: 'var(--terminal-prompt)' }} />
           <span className={styles.titleText}>{title}</span>
         </div>
         <div className={styles.titleRight}>
           {headerRightActions}
           {showCloseButton && onClose && (
-            <button onClick={(e) => { e.stopPropagation(); onClose(); }} className={styles.closeButton}>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onClose();
+              }}
+              className={styles.closeButton}
+            >
               <X className="w-4 h-4" />
             </button>
           )}

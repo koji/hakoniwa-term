@@ -29,12 +29,12 @@
 ## ✨ Features
 
 - ⚡ **Async Generator Commands**: Easily stream logs, output step-by-step responses, or trigger real-time progress bar animations using simple `async function*` yield syntax.
-- 🎨 **Retro Hacker Design**: Dark aesthetic inspired by classic CLI environments.
+- 🎨 **Built-in Themes & Customization**: Comes with 6 pre-built retro presets (`emerald`, `matrix`, `dracula`, `amber`, `cyberpunk`, `light`) and supports custom color overrides via Dynamic CSS Variables.
 - 🔒 **Style Isolation**: Built using CSS Modules—zero CSS leaks into your global styles or main app layout.
 - ⏳ **Built-in Progress Bar**: Stream live `%` progress updates directly from command generators.
 - 🔐 **System Locking**: Disables input during command execution to prevent race conditions.
 - 🧹 **Built-in Utilities**: Automatic `clear` command support.
-- 📘 **TypeScript Native**: Full type safety for props, logs, yield chunks, and command handlers.
+- 📘 **TypeScript Native**: Full type safety for props, logs, yield chunks, presets, and command handlers.
 
 ---
 
@@ -48,6 +48,7 @@ npm install hakoniwa-term lucide-react
 pnpm add hakoniwa-term lucide-react
 # or
 yarn add hakoniwa-term lucide-react
+
 ```
 
 > **Note**: `lucide-react` is required for terminal icons. `react` and `react-dom` (>= 18.0.0) are peer dependencies.
@@ -93,15 +94,70 @@ export default function App() {
 
   return (
     <div style={{ padding: '2rem', height: '100vh', background: '#020204' }}>
-      <Terminal
-        title="guest@hakoniwa:~"
-        promptString="user@hakoniwa:~$ "
-        placeholder="Type 'hello [name]' or 'system'..."
-        commands={commands}
-      />
+      <Terminal commands="{commands}" placeholder="Type 'hello [name]' or 'system'..." preset="dracula" promptString="user@hakoniwa:~$ " title="guest@hakoniwa:~"/>
     </div>
   );
 }
+
+```
+
+---
+
+## 🎨 Built-in Themes & Customization
+
+`hakoniwa-term` includes 6 built-in presets out of the box and allows seamless color overrides using the `theme` prop.
+
+### Available Presets
+
+| Preset | Aesthetic Description |
+| --- | --- |
+| `emerald` *(default)* | Classic dark theme with vibrant emerald green prompt accents. |
+| `matrix` | Neon green monochrome inspired by 90s cyber aesthetics. |
+| `dracula` | Popular dark purple theme with vibrant pink and cyan highlights. |
+| `amber` | CRT amber monitor aesthetic with warm yellow-orange hues. |
+| `cyberpunk` | High-contrast dark blue with neon cyan, yellow, and magenta accents. |
+| `light` | Clean, modern light mode with high contrast for daytime applications. |
+
+### 1. Using a Preset
+
+Simply pass the `preset` prop to the `Terminal` component:
+
+```tsx
+<Terminal commands={commands} preset="matrix" />
+```
+
+### 2. Customizing Specific Colors (Partial Override)
+
+You can override specific theme colors while keeping the base preset for everything else:
+
+```tsx
+<Terminal
+  commands={commands}
+  preset="dracula"
+  theme={{
+    prompt: '#00f0ff',
+    progress: '#ff0055',
+  }}
+/>
+```
+
+---
+
+## 🧪 Example: `hakoniwa-sample-3`
+
+The `example/hakoniwa-sample-3` project is an interactive preset playground. Use the preset selector or run these commands in the terminal:
+
+- `help` — show the available commands
+- `preset <name>` — switch between the built-in presets
+- `deploy` — stream deployment logs and progress updates
+- `clear` — clear the terminal history
+
+It also demonstrates overriding the prompt color with the `theme` prop. Start it from the repository root with:
+
+```bash
+cd example/hakoniwa-sample-3
+pnpm install
+pnpm dev
 ```
 
 ---
@@ -153,21 +209,22 @@ const commands: Record<string, CommandAction> = {
     };
   },
 };
-```
 
-https://github.com/user-attachments/assets/0f8c887e-9dc0-427f-a12d-585485da3266
+```
 
 ---
 
 ## 🎛️ Component API (`TerminalProps`)
 
 | Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
+| --- | --- | --- | --- |
 | `commands` | `Record<string, CommandAction>` | **Required** | Map of command names to async generator handlers. |
 | `promptString` | `string` | `'user@terminal:~$'` | The prompt prefix displayed before user input. |
 | `placeholder` | `string` | `'Type a command...'` | Placeholder text for the input box. |
 | `systemLockedText` | `string` | `'System locked during execution...'` | Placeholder shown while an async command is executing. |
 | `title` | `React.ReactNode` | `'terminal'` | Header title string or custom React element. |
+| `preset` | `TerminalPreset` | `'emerald'` | Built-in color preset (`emerald`, `matrix`, `dracula`, `amber`, `cyberpunk`, `light`). |
+| `theme` | `Partial<TerminalTheme>` | `undefined` | Custom theme object to override specific colors. |
 | `initialHistory` | `CommandLog[]` | `[]` | Pre-populated log items displayed when mounted. |
 | `showCloseButton` | `boolean` | `true` | Whether to render the window close button (`X`). |
 | `onClose` | `() => void` | `undefined` | Callback invoked when the close button is clicked. |
@@ -189,10 +246,26 @@ export type YieldChunk =
   | { type: 'progress'; percent: number; text?: string };
 
 export type CommandAction = (args: string[]) => AsyncGenerator<YieldChunk, void, unknown>;
+
+export interface TerminalTheme {
+  bg: string;
+  titleBg: string;
+  border: string;
+  text: string;
+  prompt: string;
+  error: string;
+  success: string;
+  progress: string;
+}
+
+export type TerminalPreset = 'emerald' | 'matrix' | 'dracula' | 'amber' | 'cyberpunk' | 'light';
+
+export const TERMINAL_PRESETS: Record<TerminalPreset, TerminalTheme>;
+
 ```
 
 ---
 
 ## 📜 License
 
-[MIT](LICENSE) © [koji](https://github.com/koji)
+[MIT](https://www.google.com/search?q=LICENSE) © [koji](https://github.com/koji)

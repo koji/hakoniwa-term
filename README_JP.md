@@ -105,6 +105,55 @@ export default function App() {
 
 ---
 
+## 🎨 組み込みプリセットとカスタマイズ
+
+`preset` prop で、ターミナルのカラーテーマを切り替えられます。利用できるプリセットは次の6種類です。
+
+| プリセット | 概要 |
+| :--- | :--- |
+| `emerald`（デフォルト） | エメラルドグリーンを基調にしたクラシックなダークテーマ |
+| `matrix` | ネオングリーンのモノクロームテーマ |
+| `dracula` | 紫を基調にしたダークテーマ |
+| `amber` | CRT のアンバー色を再現したテーマ |
+| `cyberpunk` | シアン、イエロー、マゼンタを使った高コントラストテーマ |
+| `light` | 明るい背景のライトテーマ |
+
+```tsx
+<Terminal commands={commands} preset="matrix" />
+```
+
+`theme` prop を使うと、選択したプリセットの一部の色だけを上書きできます。
+
+```tsx
+<Terminal
+  commands={commands}
+  preset="dracula"
+  theme={{
+    prompt: '#00f0ff',
+    progress: '#ff0055',
+  }}
+/>
+```
+
+## 🧪 例: `hakoniwa-sample-3`
+
+`example/hakoniwa-sample-3` には、プリセット切り替えとカスタムテーマを操作できるインタラクティブなサンプルを収録しています。ターミナルでは次のコマンドを実行できます。
+
+- `help` — 利用可能なコマンドを表示
+- `preset <name>` — 組み込みプリセットを切り替え
+- `deploy` — ログとプログレスバーをストリーミング表示
+- `clear` — ターミナル履歴を消去
+
+リポジトリのルートから次のコマンドで起動できます。
+
+```bash
+cd example/hakoniwa-sample-3
+pnpm install
+pnpm dev
+```
+
+---
+
 ## 💡 高度な使い方: ログストリーミングとプログレスバー
 
 `hakoniwa-term` のコマンドは JavaScript の **Async Generator** (`async function*`) を利用します。これにより、時間のかかる非同期処理や複数ステップのタスクにおいて、ログメッセージの逐次出力やプログレスバーの更新をシームレスに行えます。
@@ -167,6 +216,8 @@ https://github.com/user-attachments/assets/0f8c887e-9dc0-427f-a12d-585485da3266
 | `placeholder` | `string` | `'Type a command...'` | 入力ボックスのプレースホルダーテキスト。 |
 | `systemLockedText` | `string` | `'System locked during execution...'` | コマンド実行中に表示される入力ボックスのロック時テキスト。 |
 | `title` | `React.ReactNode` | `'terminal'` | ウィンドウヘッダーのタイトル（文字列またはカスタムコンポーネント）。 |
+| `preset` | `TerminalPreset` | `'emerald'` | 組み込みカラープリセット。 |
+| `theme` | `Partial<TerminalTheme>` | `undefined` | プリセットの色を部分的に上書きするカスタムテーマ。 |
 | `initialHistory` | `CommandLog[]` | `[]` | マウント時に初期表示するログの配列。 |
 | `showCloseButton` | `boolean` | `true` | ヘッダー右上の閉じるボタン (`X`) を表示するかどうか。 |
 | `onClose` | `() => void` | `undefined` | 閉じるボタンがクリックされた時のコールバック。 |
