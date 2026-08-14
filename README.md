@@ -145,6 +145,8 @@ You can override specific theme colors while keeping the base preset for everyth
 
 ## 🧪 Example: `hakoniwa-sample-3`
 
+https://github.com/user-attachments/assets/14330583-4141-4269-a055-b41c94f8addb
+
 The `example/hakoniwa-sample-3` project is an interactive preset playground. Use the preset selector or run these commands in the terminal:
 
 - `help` — show the available commands
