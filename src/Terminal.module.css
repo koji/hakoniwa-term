@@ -1,22 +1,114 @@
+/* ==========================================================================
+   1. COLOR MAPPING & THEME VARIABLE BINDINGS
+   ========================================================================== */
+
+.terminalRoot {
+  background-color: var(--terminal-bg);
+  border: 1px solid var(--terminal-border);
+  color: var(--terminal-text);
+}
+
+.titleBar {
+  background-color: var(--terminal-title-bg);
+  border-bottom: 1px solid var(--terminal-border);
+}
+
+.titleText {
+  color: rgba(156, 163, 175, 0.8);
+  color: color-mix(in srgb, var(--terminal-text) 70%, transparent);
+}
+
+.closeButton {
+  color: var(--terminal-error);
+}
+
+.closeButton:hover {
+  background-color: rgba(239, 68, 68, 0.2);
+  background-color: color-mix(in srgb, var(--terminal-error) 20%, transparent);
+}
+
+.contentBox::-webkit-scrollbar-thumb {
+  background-color: rgba(16, 185, 129, 0.2);
+  background-color: color-mix(in srgb, var(--terminal-prompt) 20%, transparent);
+}
+
+.logInput {
+  color: var(--terminal-text);
+}
+
+.logError {
+  color: var(--terminal-error);
+}
+
+.logSuccess {
+  color: var(--terminal-success);
+}
+
+.logOutput {
+  color: var(--terminal-text);
+}
+
+.progressHeader {
+  color: rgba(156, 163, 175, 0.8);
+  color: color-mix(in srgb, var(--terminal-text) 60%, transparent);
+}
+
+.progressTrack {
+  background-color: rgba(6, 78, 59, 0.4);
+  background-color: color-mix(in srgb, var(--terminal-progress) 20%, transparent);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  border: 1px solid color-mix(in srgb, var(--terminal-progress) 30%, transparent);
+}
+
+.progressBar {
+  background-color: var(--terminal-progress);
+}
+
+.inputForm {
+  border-top: 1px solid rgba(16, 185, 129, 0.1);
+  border-top: 1px solid color-mix(in srgb, var(--terminal-border) 40%, transparent);
+}
+
+.prompt {
+  color: var(--terminal-prompt);
+}
+
+.inputField {
+  color: var(--terminal-text);
+}
+
+.inputField::placeholder {
+  color: rgba(156, 163, 175, 0.5);
+  color: color-mix(in srgb, var(--terminal-text) 40%, transparent);
+}
+
+.submitButton {
+  color: rgba(16, 185, 129, 0.5);
+  color: color-mix(in srgb, var(--terminal-prompt) 50%, transparent);
+}
+
+.submitButton:hover {
+  color: var(--terminal-prompt);
+}
+
+/* ==========================================================================
+   2. STRUCTURAL & LAYOUT RULES
+   ========================================================================== */
+
 .terminalRoot {
   width: 100%;
   max-width: 56rem;
-  background-color: rgba(9, 10, 15, 0.95);
-  border: 1px solid rgba(16, 185, 129, 0.3);
   border-radius: 0.5rem;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   overflow: hidden;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   font-size: 0.875rem;
-  color: rgba(52, 211, 153, 0.9);
   position: relative;
   z-index: 10;
   backdrop-filter: blur(12px);
 }
 
 .titleBar {
-  background-color: #0e1017;
-  border-bottom: 1px solid rgba(16, 185, 129, 0.2);
   padding: 0.625rem 1rem;
   display: flex;
   align-items: center;
@@ -34,7 +126,6 @@
   font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.05em;
-  color: #9ca3af;
 }
 
 .titleRight {
@@ -50,13 +141,8 @@
   border-radius: 0.25rem;
   cursor: pointer;
   transition: background-color 0.2s;
-  color: #ef4444;
   display: flex;
   align-items: center;
-}
-
-.closeButton:hover {
-  background-color: rgba(239, 68, 68, 0.2);
 }
 
 .contentBox {
@@ -68,8 +154,8 @@
 .contentBox::-webkit-scrollbar {
   width: 6px;
 }
+
 .contentBox::-webkit-scrollbar-thumb {
-  background-color: rgba(16, 185, 129, 0.1);
   border-radius: 3px;
 }
 
@@ -79,10 +165,13 @@
   margin-bottom: 0.625rem;
 }
 
-.logInput { color: #f3f4f6; font-weight: 600; }
-.logError { color: #f87171; }
-.logSuccess { color: #6ee7b7; font-weight: 700; }
-.logOutput { color: rgba(52, 211, 153, 0.8); }
+.logInput {
+  font-weight: 600;
+}
+
+.logSuccess {
+  font-weight: 700;
+}
 
 .progressBarContainer {
   padding: 0.5rem 0;
@@ -93,21 +182,17 @@
   align-items: center;
   justify-content: space-between;
   font-size: 0.75rem;
-  color: #9ca3af;
   margin-bottom: 0.25rem;
 }
 
 .progressTrack {
   width: 100%;
-  background-color: rgba(6, 78, 59, 0.4);
-  border: 1px solid rgba(16, 185, 129, 0.2);
   height: 0.5rem;
   border-radius: 0.25rem;
   overflow: hidden;
 }
 
 .progressBar {
-  background-color: #10b981;
   height: 100%;
   transition: width 0.3s ease;
 }
@@ -118,11 +203,9 @@
   gap: 0.5rem;
   margin-top: 0.5rem;
   padding-top: 0.5rem;
-  border-top: 1px solid rgba(16, 185, 129, 0.1);
 }
 
 .prompt {
-  color: #10b981;
   font-weight: 700;
 }
 
@@ -131,26 +214,16 @@
   background: transparent;
   border: none;
   outline: none;
-  color: #f3f4f6;
   font-size: 0.875rem;
   padding: 0;
   font-family: inherit;
 }
 
-.inputField::placeholder {
-  color: rgba(156, 163, 175, 0.5);
-}
-
 .submitButton {
   border: none;
   background: transparent;
-  color: rgba(16, 185, 129, 0.5);
   cursor: pointer;
   transition: color 0.2s;
   display: flex;
   align-items: center;
-}
-
-.submitButton:hover {
-  color: #34d399;
 }
