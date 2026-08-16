@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       hakoniwa-term:
-        specifier: ^0.0.3
-        version: 0.0.3(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+        specifier: link:../../
+        version: link:../..
       lucide-react:
         specifier: ^0.470.0
         version: 0.470.0(react@19.2.8)
@@ -330,12 +330,6 @@ packages:
     resolution: {integrity: sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==}
     engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
     os: [darwin]
-
-  hakoniwa-term@0.0.3:
-    resolution: {integrity: sha512-INmK+heEQi2lom9wljShDaij6z9LEE84K2+nEeAqXjQqRoWrN2ui5wcVLKh9NT1exWIL0eWSXVrV93h+XQAKzg==}
-    peerDependencies:
-      react: ^18.0.0 || ^19.0.0
-      react-dom: ^18.0.0 || ^19.0.0
 
   lightningcss-android-arm64@1.33.0:
     resolution: {integrity: sha512-gEpRTalKdosp4Bb8qWtc2iOgE5SeIHlpS1up9bFq2wAyYhl1UdTObYiHe98zEM9SQvSoqQZ1IQD0JNpg3Ml5pg==}
@@ -691,12 +685,6 @@ snapshots:
 
   fsevents@2.3.3:
     optional: true
-
-  hakoniwa-term@0.0.3(react-dom@19.2.8(react@19.2.8))(react@19.2.8):
-    dependencies:
-      lucide-react: 0.470.0(react@19.2.8)
-      react: 19.2.8
-      react-dom: 19.2.8(react@19.2.8)
 
   lightningcss-android-arm64@1.33.0:
     optional: true

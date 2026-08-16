@@ -8,7 +8,7 @@
     "build": "tsc && vite build"
   },
   "dependencies": {
-    "hakoniwa-term": "^0.0.5",
+    "hakoniwa-term": "link:../../",
     "lucide-react": "^0.470.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
