@@ -8,9 +8,9 @@ importers:
 
   .:
     dependencies:
-      kuro-gamen:
-        specifier: file:../kurogamen
-        version: file:../kurogamen(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      hakoniwa-term:
+        specifier: ^0.0.5
+        version: 0.0.5(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       lucide-react:
         specifier: ^0.470.0
         version: 0.470.0(react@19.2.7)
@@ -522,6 +522,12 @@ packages:
     resolution: {integrity: sha512-3hN7NaskYvMDLQY55gnW3NQ+mesEAepTqlg+VEbj7zzqEMBVNhzcGYYeqFo/TlYz6eQiFcp1HcsCZO+nGgS8zg==}
     engines: {node: '>=6.9.0'}
 
+  hakoniwa-term@0.0.5:
+    resolution: {integrity: sha512-2byihNtV2dnVF+PQb1NXt67+nrQc4SWhx1nHhGkHvGo0qKowqJDmG0SEcvHD1F3OhAXzUaZeTx2RgZPNliknFw==}
+    peerDependencies:
+      react: ^18.0.0 || ^19.0.0
+      react-dom: ^18.0.0 || ^19.0.0
+
   js-tokens@4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
 
@@ -534,12 +540,6 @@ packages:
     resolution: {integrity: sha512-XmOWe7eyHYH14cLdVPoyg+GOH3rYX++KpzrylJwSW98t3Nk+U8XOl8FWKOgwtzdb8lXGf6zYwDUzeHMWfxasyg==}
     engines: {node: '>=6'}
     hasBin: true
-
-  kuro-gamen@file:../kurogamen:
-    resolution: {directory: ../kurogamen, type: directory}
-    peerDependencies:
-      react: ^18.0.0 || ^19.0.0
-      react-dom: ^18.0.0 || ^19.0.0
 
   lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
@@ -1052,17 +1052,17 @@ snapshots:
 
   gensync@1.0.0-beta.2: {}
 
+  hakoniwa-term@0.0.5(react-dom@19.2.7(react@19.2.7))(react@19.2.7):
+    dependencies:
+      lucide-react: 0.470.0(react@19.2.7)
+      react: 19.2.7
+      react-dom: 19.2.7(react@19.2.7)
+
   js-tokens@4.0.0: {}
 
   jsesc@3.1.0: {}
 
   json5@2.2.3: {}
-
-  kuro-gamen@file:../kurogamen(react-dom@19.2.7(react@19.2.7))(react@19.2.7):
-    dependencies:
-      lucide-react: 0.470.0(react@19.2.7)
-      react: 19.2.7
-      react-dom: 19.2.7(react@19.2.7)
 
   lru-cache@5.1.1:
     dependencies:

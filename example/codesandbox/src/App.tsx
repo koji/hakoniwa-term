@@ -1,8 +1,8 @@
 import React from 'react';
 // ローカルリンクしたパッケージから名前付きエクスポートで取得
-import { Terminal, CommandAction } from 'kuro-gamen';
+import { Terminal, CommandAction } from 'hakoniwa-term';
 // パッケージのスタイルを手動インポート
-import 'kuro-gamen/dist/index.css';
+import 'hakoniwa-term/dist/index.css';
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
