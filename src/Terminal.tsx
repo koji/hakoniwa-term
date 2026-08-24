@@ -200,7 +200,7 @@ export default function Terminal({
 
     setHistory((prev) => [
       ...prev,
-      { id: nextLogId(), log: { type: 'input', text: `${promptString} ${trimmedInput}` } },
+      { id: nextEntryId(prev), log: { type: 'input', text: `${promptString} ${trimmedInput}` } },
     ]);
     setInput('');
 
@@ -219,7 +219,7 @@ export default function Terminal({
 
         for await (const chunk of generator) {
           if (chunk.type === 'log') {
-            setHistory((prev) => [...prev, { id: nextLogId(), log: chunk.log }]);
+            setHistory((prev) => [...prev, { id: nextEntryId(prev), log: chunk.log }]);
           } else if (chunk.type === 'progress') {
             setSyncProgress(chunk.percent);
             if (chunk.text) setProgressText(chunk.text);
@@ -229,7 +229,7 @@ export default function Terminal({
         setHistory((prev) => [
           ...prev,
           {
-            id: nextLogId(),
+            id: nextEntryId(prev),
             log: { type: 'error', text: `Execution error: ${err instanceof Error ? err.message : String(err)}` },
           },
         ]);
@@ -241,7 +241,7 @@ export default function Terminal({
     } else {
       setHistory((prev) => [
         ...prev,
-        { id: nextLogId(), log: { type: 'error', text: commandNotFoundFormatter(primaryCmd) } },
+        { id: nextEntryId(prev), log: { type: 'error', text: commandNotFoundFormatter(primaryCmd) } },
       ]);
     }
   };
