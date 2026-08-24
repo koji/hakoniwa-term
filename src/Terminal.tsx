@@ -13,6 +13,11 @@ export type YieldChunk =
 
 export type CommandAction = (args: string[]) => AsyncGenerator<YieldChunk, void, unknown>;
 
+interface HistoryEntry {
+  id: number;
+  log: CommandLog;
+}
+
 /**
  * ターミナルのカラーテーマのインターフェース（主要8色）
  */
@@ -98,6 +103,17 @@ export const TERMINAL_PRESETS: Record<TerminalPreset, TerminalTheme> = {
   },
 };
 
+/** 履歴エントリの次の ID を算出する純粋関数 */
+const nextEntryId = (entries: HistoryEntry[]) =>
+  entries.reduce((max, entry) => Math.max(max, entry.id), 0) + 1;
+
+const getLogClass = (type: CommandLog['type']) => {
+  if (type === 'input') return styles.logInput;
+  if (type === 'error') return styles.logError;
+  if (type === 'success') return styles.logSuccess;
+  return styles.logOutput;
+};
+
 export interface TerminalProps {
   promptString?: string;
   placeholder?: string;
@@ -130,7 +146,9 @@ export default function Terminal({
   theme,
 }: TerminalProps) {
   const [input, setInput] = useState('');
-  const [history, setHistory] = useState<CommandLog[]>(initialHistory);
+  const [history, setHistory] = useState<HistoryEntry[]>(() =>
+    initialHistory.map((log, index) => ({ id: index + 1, log })),
+  );
 
   const [isSystemLocked, setIsSystemLocked] = useState(false);
   const [syncProgress, setSyncProgress] = useState<number | null>(null);
@@ -138,6 +156,7 @@ export default function Terminal({
 
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const rootRef = useRef<HTMLDivElement>(null);
 
   // プリセットとカスタムthemeのマージによるCSS変数の動的注入計算
   const dynamicStyles = useMemo(() => {
@@ -162,16 +181,30 @@ export default function Terminal({
     }
   }, [history, syncProgress, progressText, isSystemLocked]);
 
-  const handleTerminalClick = () => {
-    if (inputRef.current) inputRef.current.focus();
-  };
+  // ターミナル本体のクリックで入力欄へフォーカスを移す。
+  // 静的要素に JSX のインタラクション prop を付けないため、ネイティブリスナーで委譲する。
+  // ボタン（閉じる・送信）のクリックはフォーカス移動の対象外
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+    const handleTerminalClick = (event: MouseEvent) => {
+      const target = event.target as HTMLElement | null;
+      if (target?.closest('button')) return;
+      if (inputRef.current) inputRef.current.focus();
+    };
+    root.addEventListener('click', handleTerminalClick);
+    return () => root.removeEventListener('click', handleTerminalClick);
+  }, []);
 
   const handleCommand = async (e: React.FormEvent) => {
     e.preventDefault();
     const trimmedInput = input.trim();
     if (!trimmedInput || isSystemLocked) return;
 
-    setHistory((prev) => [...prev, { type: 'input', text: `${promptString} ${trimmedInput}` }]);
+    setHistory((prev) => [
+      ...prev,
+      { id: nextEntryId(prev), log: { type: 'input', text: `${promptString} ${trimmedInput}` } },
+    ]);
     setInput('');
 
     const args = trimmedInput.split(' ');
@@ -189,7 +222,7 @@ export default function Terminal({
 
         for await (const chunk of generator) {
           if (chunk.type === 'log') {
-            setHistory((prev) => [...prev, chunk.log]);
+            setHistory((prev) => [...prev, { id: nextEntryId(prev), log: chunk.log }]);
           } else if (chunk.type === 'progress') {
             setSyncProgress(chunk.percent);
             if (chunk.text) setProgressText(chunk.text);
@@ -198,7 +231,10 @@ export default function Terminal({
       } catch (err) {
         setHistory((prev) => [
           ...prev,
-          { type: 'error', text: `Execution error: ${err instanceof Error ? err.message : String(err)}` },
+          {
+            id: nextEntryId(prev),
+            log: { type: 'error', text: `Execution error: ${err instanceof Error ? err.message : String(err)}` },
+          },
         ]);
       } finally {
         setIsSystemLocked(false);
@@ -206,22 +242,18 @@ export default function Terminal({
         setProgressText('');
       }
     } else {
-      setHistory((prev) => [...prev, { type: 'error', text: commandNotFoundFormatter(primaryCmd) }]);
+      setHistory((prev) => [
+        ...prev,
+        { id: nextEntryId(prev), log: { type: 'error', text: commandNotFoundFormatter(primaryCmd) } },
+      ]);
     }
-  };
-
-  const getLogClass = (type: CommandLog['type']) => {
-    if (type === 'input') return styles.logInput;
-    if (type === 'error') return styles.logError;
-    if (type === 'success') return styles.logSuccess;
-    return styles.logOutput;
   };
 
   return (
     <div
+      ref={rootRef}
       className={styles.terminalRoot}
       style={dynamicStyles}
-      onClick={handleTerminalClick}
     >
       <div className={styles.titleBar}>
         <div className={styles.titleLeft}>
@@ -237,6 +269,7 @@ export default function Terminal({
                 onClose();
               }}
               className={styles.closeButton}
+              aria-label="Close terminal"
             >
               <X className="w-4 h-4" />
             </button>
@@ -245,8 +278,8 @@ export default function Terminal({
       </div>
 
       <div ref={containerRef} className={styles.contentBox}>
-        {history.map((log, index) => (
-          <div key={index} className={`${styles.logRow} ${getLogClass(log.type)}`}>
+        {history.map(({ id, log }) => (
+          <div key={id} className={`${styles.logRow} ${getLogClass(log.type)}`}>
             {log.text}
           </div>
         ))}
@@ -278,7 +311,7 @@ export default function Terminal({
             autoCapitalize="off"
             spellCheck="false"
           />
-          <button type="submit" className={styles.submitButton}>
+          <button type="submit" className={styles.submitButton} aria-label="Run command">
             <CornerDownLeft className="w-4 h-4" />
           </button>
         </form>

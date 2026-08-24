@@ -156,6 +156,7 @@ export default function TerminalPlayground() {
               value={customPromptColor}
               onChange={(e) => setCustomPromptColor(e.target.value)}
               style={colorPickerStyle}
+              aria-label="Prompt Color"
             />
           )}
         </div>
