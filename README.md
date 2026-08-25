@@ -11,7 +11,7 @@
 
 ## 🪴 What is Hakoniwa (箱庭)?
 
-> In Japanese, **「箱庭（はこにわ / hakoniwa）」** literally means *“box garden.”*  
+> In Japanese, **「箱庭（はこにわ / hakoniwa）」** literally means _“box garden.”_  
 > It refers to a small, self-contained miniature garden or landscape arranged inside a box or tray—like tiny rocks, plants, and buildings forming a little self-contained world you can observe and interact with.
 
 `hakoniwa-term` brings that miniature, self-contained concept to terminal UIs in React.
@@ -62,43 +62,48 @@ yarn add hakoniwa-term lucide-react
 3. Map your commands using async generator functions.
 
 ```tsx
-import React from 'react';
-import { Terminal } from 'hakoniwa-term';
-import type { CommandAction } from 'hakoniwa-term';
+import React from "react";
+import { Terminal } from "hakoniwa-term";
+import type { CommandAction } from "hakoniwa-term";
 
-import 'hakoniwa-term/dist/index.css';
+import "hakoniwa-term/dist/index.css";
 
 export default function App() {
   const commands: Record<string, CommandAction> = {
     // Simple greeting command
     hello: async function* (args) {
-      const name = args[1] || 'Guest';
+      const name = args[1] || "Guest";
       yield {
-        type: 'log',
-        log: { type: 'success', text: `✨ Welcome aboard, ${name}!` },
+        type: "log",
+        log: { type: "success", text: `✨ Welcome aboard, ${name}!` },
       };
     },
 
     // Info command
     system: async function* () {
       yield {
-        type: 'log',
-        log: { type: 'output', text: 'System status: Operational' },
+        type: "log",
+        log: { type: "output", text: "System status: Operational" },
       };
       yield {
-        type: 'log',
-        log: { type: 'output', text: 'Kernel: hakoniwa-v0.0.3' },
+        type: "log",
+        log: { type: "output", text: "Kernel: hakoniwa-v0.0.3" },
       };
     },
   };
 
   return (
-    <div style={{ padding: '2rem', height: '100vh', background: '#020204' }}>
-      <Terminal commands="{commands}" placeholder="Type 'hello [name]' or 'system'..." preset="dracula" promptString="user@hakoniwa:~$ " title="guest@hakoniwa:~"/>
+    <div style={{ padding: "2rem", height: "100vh", background: "#020204" }}>
+      <Terminal
+        commands="{commands}"
+        placeholder="Type 'hello [name]' or 'system'..."
+        preset="dracula"
+        promptString="user@hakoniwa:~$ "
+        title="guest@hakoniwa:~"
+      />
     </div>
   );
 }
-
 ```
 
 ---
@@ -109,14 +114,14 @@ export default function App() {
 
 ### Available Presets
 
-| Preset | Aesthetic Description |
-| --- | --- |
-| `emerald` *(default)* | Classic dark theme with vibrant emerald green prompt accents. |
-| `matrix` | Neon green monochrome inspired by 90s cyber aesthetics. |
-| `dracula` | Popular dark purple theme with vibrant pink and cyan highlights. |
-| `amber` | CRT amber monitor aesthetic with warm yellow-orange hues. |
-| `cyberpunk` | High-contrast dark blue with neon cyan, yellow, and magenta accents. |
-| `light` | Clean, modern light mode with high contrast for daytime applications. |
+| Preset                | Aesthetic Description                                                 |
+| --------------------- | --------------------------------------------------------------------- |
+| `emerald` _(default)_ | Classic dark theme with vibrant emerald green prompt accents.         |
+| `matrix`              | Neon green monochrome inspired by 90s cyber aesthetics.               |
+| `dracula`             | Popular dark purple theme with vibrant pink and cyan highlights.      |
+| `amber`               | CRT amber monitor aesthetic with warm yellow-orange hues.             |
+| `cyberpunk`           | High-contrast dark blue with neon cyan, yellow, and magenta accents.  |
+| `light`               | Clean, modern light mode with high contrast for daytime applications. |
 
 ### 1. Using a Preset
 
@@ -135,8 +140,8 @@ You can override specific theme colors while keeping the base preset for everyth
   commands={commands}
   preset="dracula"
   theme={{
-    prompt: '#00f0ff',
-    progress: '#ff0055',
+    prompt: "#00f0ff",
+    progress: "#ff0055",
   }}
 />
 ```
@@ -171,9 +176,9 @@ pnpm dev
 ### Example: Multi-step Async Command with Progress Updates
 
 ```tsx
-import { Terminal } from 'hakoniwa-term';
-import type { CommandAction } from 'hakoniwa-term';
-import 'hakoniwa-term/dist/index.css';
+import { Terminal } from "hakoniwa-term";
+import type { CommandAction } from "hakoniwa-term";
+import "hakoniwa-term/dist/index.css";
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -181,57 +186,66 @@ const commands: Record<string, CommandAction> = {
   sync: async function* () {
     // 1. Stream log output
     yield {
-      type: 'log',
-      log: { type: 'output', text: 'Connecting to remote repository...' },
+      type: "log",
+      log: { type: "output", text: "Connecting to remote repository..." },
     };
 
     // 2. Stream progress (20%)
     await delay(500);
-    yield { type: 'progress', percent: 20, text: 'Fetching remote refs...' };
+    yield { type: "progress", percent: 20, text: "Fetching remote refs..." };
 
     // 3. Stream progress (65%)
     await delay(500);
-    yield { type: 'progress', percent: 65, text: 'Unpacking objects...' };
+    yield { type: "progress", percent: 65, text: "Unpacking objects..." };
 
     // 4. Stream progress (100%)
     await delay(500);
-    yield { type: 'progress', percent: 100, text: 'Finalizing sync procedure...' };
+    yield {
+      type: "progress",
+      percent: 100,
+      text: "Finalizing sync procedure...",
+    };
 
     // 5. Stream final success log
     yield {
-      type: 'log',
-      log: { type: 'success', text: '✨ Repository synchronized successfully!' },
+      type: "log",
+      log: {
+        type: "success",
+        text: "✨ Repository synchronized successfully!",
+      },
     };
   },
 
   errorTest: async function* () {
     yield {
-      type: 'log',
-      log: { type: 'error', text: '❌ CRITICAL: Unauthorized access detected!' },
+      type: "log",
+      log: {
+        type: "error",
+        text: "❌ CRITICAL: Unauthorized access detected!",
+      },
     };
   },
 };
-
 ```
 
 ---
 
 ## 🎛️ Component API (`TerminalProps`)
 
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `commands` | `Record<string, CommandAction>` | **Required** | Map of command names to async generator handlers. |
-| `promptString` | `string` | `'user@terminal:~$'` | The prompt prefix displayed before user input. |
-| `placeholder` | `string` | `'Type a command...'` | Placeholder text for the input box. |
-| `systemLockedText` | `string` | `'System locked during execution...'` | Placeholder shown while an async command is executing. |
-| `title` | `React.ReactNode` | `'terminal'` | Header title string or custom React element. |
-| `preset` | `TerminalPreset` | `'emerald'` | Built-in color preset (`emerald`, `matrix`, `dracula`, `amber`, `cyberpunk`, `light`). |
-| `theme` | `Partial<TerminalTheme>` | `undefined` | Custom theme object to override specific colors. |
-| `initialHistory` | `CommandLog[]` | `[]` | Pre-populated log items displayed when mounted. |
-| `showCloseButton` | `boolean` | `true` | Whether to render the window close button (`X`). |
-| `onClose` | `() => void` | `undefined` | Callback invoked when the close button is clicked. |
-| `headerRightActions` | `React.ReactNode` | `undefined` | Custom React nodes rendered in the top-right of the title bar. |
-| `commandNotFoundFormatter` | `(cmd: string) => string` | `(cmd) => Command not found: "${cmd}".` | Formatter function for unknown commands. |
+| Prop                       | Type                            | Default                                 | Description                                                                            |
+| -------------------------- | ------------------------------- | --------------------------------------- | -------------------------------------------------------------------------------------- |
+| `commands`                 | `Record<string, CommandAction>` | **Required**                            | Map of command names to async generator handlers.                                      |
+| `promptString`             | `string`                        | `'user@terminal:~$'`                    | The prompt prefix displayed before user input.                                         |
+| `placeholder`              | `string`                        | `'Type a command...'`                   | Placeholder text for the input box.                                                    |
+| `systemLockedText`         | `string`                        | `'System locked during execution...'`   | Placeholder shown while an async command is executing.                                 |
+| `title`                    | `React.ReactNode`               | `'terminal'`                            | Header title string or custom React element.                                           |
+| `preset`                   | `TerminalPreset`                | `'emerald'`                             | Built-in color preset (`emerald`, `matrix`, `dracula`, `amber`, `cyberpunk`, `light`). |
+| `theme`                    | `Partial<TerminalTheme>`        | `undefined`                             | Custom theme object to override specific colors.                                       |
+| `initialHistory`           | `CommandLog[]`                  | `[]`                                    | Pre-populated log items displayed when mounted.                                        |
+| `showCloseButton`          | `boolean`                       | `true`                                  | Whether to render the window close button (`X`).                                       |
+| `onClose`                  | `() => void`                    | `undefined`                             | Callback invoked when the close button is clicked.                                     |
+| `headerRightActions`       | `React.ReactNode`               | `undefined`                             | Custom React nodes rendered in the top-right of the title bar.                         |
+| `commandNotFoundFormatter` | `(cmd: string) => string`       | `(cmd) => Command not found: "${cmd}".` | Formatter function for unknown commands.                                               |
 
 ---
 
@@ -239,15 +253,17 @@ const commands: Record<string, CommandAction> = {
 
 ```typescript
 export interface CommandLog {
-  type: 'input' | 'output' | 'error' | 'success';
+  type: "input" | "output" | "error" | "success";
   text: string;
 }
 
 export type YieldChunk =
-  | { type: 'log'; log: CommandLog }
-  | { type: 'progress'; percent: number; text?: string };
+  | { type: "log"; log: CommandLog }
+  | { type: "progress"; percent: number; text?: string };
 
-export type CommandAction = (args: string[]) => AsyncGenerator<YieldChunk, void, unknown>;
+export type CommandAction = (
+  args: string[],
+) => AsyncGenerator<YieldChunk, void, unknown>;
 
 export interface TerminalTheme {
   bg: string;
@@ -260,10 +276,10 @@ export interface TerminalTheme {
   progress: string;
 }
 
-export type TerminalPreset = 'emerald' | 'matrix' | 'dracula' | 'amber' | 'cyberpunk' | 'light';
+export type TerminalPreset =
+  "emerald" | "matrix" | "dracula" | "amber" | "cyberpunk" | "light";
 
 export const TERMINAL_PRESETS: Record<TerminalPreset, TerminalTheme>;
-
 ```
 
 ---
