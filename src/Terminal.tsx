@@ -103,6 +103,17 @@ export const TERMINAL_PRESETS: Record<TerminalPreset, TerminalTheme> = {
   },
 };
 
+/** 履歴エントリの次の ID を算出する純粋関数 */
+const nextEntryId = (entries: HistoryEntry[]) =>
+  entries.reduce((max, entry) => Math.max(max, entry.id), 0) + 1;
+
+const getLogClass = (type: CommandLog['type']) => {
+  if (type === 'input') return styles.logInput;
+  if (type === 'error') return styles.logError;
+  if (type === 'success') return styles.logSuccess;
+  return styles.logOutput;
+};
+
 export interface TerminalProps {
   promptString?: string;
   placeholder?: string;
@@ -119,17 +130,6 @@ export interface TerminalProps {
   /** カスタムテーマによる部分オーバーライド */
   theme?: Partial<TerminalTheme>;
 }
-
-/** 履歴エントリの次の ID を算出する純粋関数 */
-const nextEntryId = (entries: HistoryEntry[]) =>
-  entries.reduce((max, entry) => Math.max(max, entry.id), 0) + 1;
-
-const getLogClass = (type: CommandLog['type']) => {
-  if (type === 'input') return styles.logInput;
-  if (type === 'error') return styles.logError;
-  if (type === 'success') return styles.logSuccess;
-  return styles.logOutput;
-};
 
 export default function Terminal({
   promptString = 'user@terminal:~$',
@@ -181,12 +181,15 @@ export default function Terminal({
     }
   }, [history, syncProgress, progressText, isSystemLocked]);
 
-  // ターミナルのどこをクリックしても入力入力欄へフォーカスを移す（マウス専用の利便性のため
-  // 静的要素としてのセマンティクスは保持し、支援技術には操作対象として提示しない）
+  // ターミナル本体のクリックで入力欄へフォーカスを移す。
+  // 静的要素に JSX のインタラクション prop を付けないため、ネイティブリスナーで委譲する。
+  // ボタン（閉じる・送信）のクリックはフォーカス移動の対象外
   useEffect(() => {
     const root = rootRef.current;
     if (!root) return;
-    const handleTerminalClick = () => {
+    const handleTerminalClick = (event: MouseEvent) => {
+      const target = event.target as HTMLElement | null;
+      if (target?.closest('button')) return;
       if (inputRef.current) inputRef.current.focus();
     };
     root.addEventListener('click', handleTerminalClick);
