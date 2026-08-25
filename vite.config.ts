@@ -1,7 +1,7 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-import dts from 'vite-plugin-dts';
-import { resolve } from 'node:path';
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import dts from "vite-plugin-dts";
+import { resolve } from "node:path";
 
 export default defineConfig({
   plugins: [
@@ -13,22 +13,22 @@ export default defineConfig({
   ],
   build: {
     lib: {
-      entry: resolve(__dirname, 'src/index.ts'),
-      name: 'hakoniwa-term',
-      formats: ['es', 'cjs'],
-      fileName: (format) => `index.${format === 'es' ? 'js' : 'cjs'}`,
+      entry: resolve(__dirname, "src/index.ts"),
+      name: "hakoniwa-term",
+      formats: ["es", "cjs"],
+      fileName: (format) => `index.${format === "es" ? "js" : "cjs"}`,
       // CSSファイルの出力名を固定化する
-      cssFileName: 'index',
+      cssFileName: "index",
     },
     rollupOptions: {
       // 外部依存関係としてバンドルから除外するライブラリ
       // (react/jsx-runtime などのサブパスも含めて除外する)
-      external: [/^react($|\/)/, /^react-dom($|\/)/, 'lucide-react'],
+      external: [/^react($|\/)/, /^react-dom($|\/)/, "lucide-react"],
       output: {
         globals: {
-          react: 'React',
-          'react-dom': 'ReactDOM',
-          'lucide-react': 'LucideReact',
+          react: "React",
+          "react-dom": "ReactDOM",
+          "lucide-react": "LucideReact",
         },
       },
     },

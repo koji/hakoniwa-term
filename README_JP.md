@@ -61,37 +61,37 @@ yarn add hakoniwa-term lucide-react
 3. Async Generator 関数としてコマンドマップを定義します。
 
 ```tsx
-import React from 'react';
-import { Terminal } from 'hakoniwa-term';
-import type { CommandAction } from 'hakoniwa-term';
-import 'hakoniwa-term/dist/index.css';
+import React from "react";
+import { Terminal } from "hakoniwa-term";
+import type { CommandAction } from "hakoniwa-term";
+import "hakoniwa-term/dist/index.css";
 
 export default function App() {
   const commands: Record<string, CommandAction> = {
     // 挨拶コマンド
     hello: async function* (args) {
-      const name = args[1] || 'Guest';
+      const name = args[1] || "Guest";
       yield {
-        type: 'log',
-        log: { type: 'success', text: `✨ ようこそ、${name} さん！` },
+        type: "log",
+        log: { type: "success", text: `✨ ようこそ、${name} さん！` },
       };
     },
 
     // システム情報コマンド
     system: async function* () {
       yield {
-        type: 'log',
-        log: { type: 'output', text: 'System status: Operational' },
+        type: "log",
+        log: { type: "output", text: "System status: Operational" },
       };
       yield {
-        type: 'log',
-        log: { type: 'output', text: 'Kernel: hakoniwa-v0.0.3' },
+        type: "log",
+        log: { type: "output", text: "Kernel: hakoniwa-v0.0.3" },
       };
     },
   };
 
   return (
-    <div style={{ padding: '2rem', height: '100vh', background: '#020204' }}>
+    <div style={{ padding: "2rem", height: "100vh", background: "#020204" }}>
       <Terminal
         title="guest@hakoniwa:~"
         promptString="user@hakoniwa:~$ "
@@ -109,14 +109,14 @@ export default function App() {
 
 `preset` prop で、ターミナルのカラーテーマを切り替えられます。利用できるプリセットは次の6種類です。
 
-| プリセット | 概要 |
-| :--- | :--- |
+| プリセット              | 概要                                                   |
+| :---------------------- | :----------------------------------------------------- |
 | `emerald`（デフォルト） | エメラルドグリーンを基調にしたクラシックなダークテーマ |
-| `matrix` | ネオングリーンのモノクロームテーマ |
-| `dracula` | 紫を基調にしたダークテーマ |
-| `amber` | CRT のアンバー色を再現したテーマ |
-| `cyberpunk` | シアン、イエロー、マゼンタを使った高コントラストテーマ |
-| `light` | 明るい背景のライトテーマ |
+| `matrix`                | ネオングリーンのモノクロームテーマ                     |
+| `dracula`               | 紫を基調にしたダークテーマ                             |
+| `amber`                 | CRT のアンバー色を再現したテーマ                       |
+| `cyberpunk`             | シアン、イエロー、マゼンタを使った高コントラストテーマ |
+| `light`                 | 明るい背景のライトテーマ                               |
 
 ```tsx
 <Terminal commands={commands} preset="matrix" />
@@ -129,8 +129,8 @@ export default function App() {
   commands={commands}
   preset="dracula"
   theme={{
-    prompt: '#00f0ff',
-    progress: '#ff0055',
+    prompt: "#00f0ff",
+    progress: "#ff0055",
   }}
 />
 ```
@@ -138,7 +138,6 @@ export default function App() {
 ## 🧪 例: `hakoniwa-sample-3`
 
 https://github.com/user-attachments/assets/14330583-4141-4269-a055-b41c94f8addb
-
 
 `example/hakoniwa-sample-3` には、プリセット切り替えとカスタムテーマを操作できるインタラクティブなサンプルを収録しています。ターミナルでは次のコマンドを実行できます。
 
@@ -164,9 +163,9 @@ pnpm dev
 ### 例: プログレスバー付きのマルチステップ非同期コマンド
 
 ```tsx
-import { Terminal } from 'hakoniwa-term';
-import type { CommandAction } from 'hakoniwa-term';
-import 'hakoniwa-term/dist/index.css';
+import { Terminal } from "hakoniwa-term";
+import type { CommandAction } from "hakoniwa-term";
+import "hakoniwa-term/dist/index.css";
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -174,33 +173,39 @@ const commands: Record<string, CommandAction> = {
   sync: async function* () {
     // 1. ログ出力
     yield {
-      type: 'log',
-      log: { type: 'output', text: 'リモートリポジトリに接続中...' },
+      type: "log",
+      log: { type: "output", text: "リモートリポジトリに接続中..." },
     };
 
     // 2. プログレス更新 (20%)
     await delay(500);
-    yield { type: 'progress', percent: 20, text: 'リモート参照を取得中...' };
+    yield { type: "progress", percent: 20, text: "リモート参照を取得中..." };
 
     // 3. プログレス更新 (65%)
     await delay(500);
-    yield { type: 'progress', percent: 65, text: 'オブジェクトを展開中...' };
+    yield { type: "progress", percent: 65, text: "オブジェクトを展開中..." };
 
     // 4. プログレス更新 (100%)
     await delay(500);
-    yield { type: 'progress', percent: 100, text: '同期処理を完了中...' };
+    yield { type: "progress", percent: 100, text: "同期処理を完了中..." };
 
     // 5. 最終成功ログを出力
     yield {
-      type: 'log',
-      log: { type: 'success', text: '✨ リポジトリの同期が正常に完了しました！' },
+      type: "log",
+      log: {
+        type: "success",
+        text: "✨ リポジトリの同期が正常に完了しました！",
+      },
     };
   },
 
   errorTest: async function* () {
     yield {
-      type: 'log',
-      log: { type: 'error', text: '❌ エラー: 不正なアクセスが検出されました！' },
+      type: "log",
+      log: {
+        type: "error",
+        text: "❌ エラー: 不正なアクセスが検出されました！",
+      },
     };
   },
 };
@@ -212,20 +217,20 @@ https://github.com/user-attachments/assets/0f8c887e-9dc0-427f-a12d-585485da3266
 
 ## 🎛️ コンポーネント API (`TerminalProps`)
 
-| Prop | 型 | 初期値 | 説明 |
-| :--- | :--- | :--- | :--- |
-| `commands` | `Record<string, CommandAction>` | **必須** | コマンド名と Async Generator ハンドラーのマッピング。 |
-| `promptString` | `string` | `'user@terminal:~$'` | 入力フィールドの前に表示されるプロンプト文字列。 |
-| `placeholder` | `string` | `'Type a command...'` | 入力ボックスのプレースホルダーテキスト。 |
-| `systemLockedText` | `string` | `'System locked during execution...'` | コマンド実行中に表示される入力ボックスのロック時テキスト。 |
-| `title` | `React.ReactNode` | `'terminal'` | ウィンドウヘッダーのタイトル（文字列またはカスタムコンポーネント）。 |
-| `preset` | `TerminalPreset` | `'emerald'` | 組み込みカラープリセット。 |
-| `theme` | `Partial<TerminalTheme>` | `undefined` | プリセットの色を部分的に上書きするカスタムテーマ。 |
-| `initialHistory` | `CommandLog[]` | `[]` | マウント時に初期表示するログの配列。 |
-| `showCloseButton` | `boolean` | `true` | ヘッダー右上の閉じるボタン (`X`) を表示するかどうか。 |
-| `onClose` | `() => void` | `undefined` | 閉じるボタンがクリックされた時のコールバック。 |
-| `headerRightActions` | `React.ReactNode` | `undefined` | ヘッダー右側に配置するカスタム React ノード。 |
-| `commandNotFoundFormatter` | `(cmd: string) => string` | `(cmd) => Command not found: "${cmd}".` | 未定義コマンドが入力された時のエラーメッセージ生成関数。 |
+| Prop                       | 型                              | 初期値                                  | 説明                                                                 |
+| :------------------------- | :------------------------------ | :-------------------------------------- | :------------------------------------------------------------------- |
+| `commands`                 | `Record<string, CommandAction>` | **必須**                                | コマンド名と Async Generator ハンドラーのマッピング。                |
+| `promptString`             | `string`                        | `'user@terminal:~$'`                    | 入力フィールドの前に表示されるプロンプト文字列。                     |
+| `placeholder`              | `string`                        | `'Type a command...'`                   | 入力ボックスのプレースホルダーテキスト。                             |
+| `systemLockedText`         | `string`                        | `'System locked during execution...'`   | コマンド実行中に表示される入力ボックスのロック時テキスト。           |
+| `title`                    | `React.ReactNode`               | `'terminal'`                            | ウィンドウヘッダーのタイトル（文字列またはカスタムコンポーネント）。 |
+| `preset`                   | `TerminalPreset`                | `'emerald'`                             | 組み込みカラープリセット。                                           |
+| `theme`                    | `Partial<TerminalTheme>`        | `undefined`                             | プリセットの色を部分的に上書きするカスタムテーマ。                   |
+| `initialHistory`           | `CommandLog[]`                  | `[]`                                    | マウント時に初期表示するログの配列。                                 |
+| `showCloseButton`          | `boolean`                       | `true`                                  | ヘッダー右上の閉じるボタン (`X`) を表示するかどうか。                |
+| `onClose`                  | `() => void`                    | `undefined`                             | 閉じるボタンがクリックされた時のコールバック。                       |
+| `headerRightActions`       | `React.ReactNode`               | `undefined`                             | ヘッダー右側に配置するカスタム React ノード。                        |
+| `commandNotFoundFormatter` | `(cmd: string) => string`       | `(cmd) => Command not found: "${cmd}".` | 未定義コマンドが入力された時のエラーメッセージ生成関数。             |
 
 ---
 
@@ -233,15 +238,17 @@ https://github.com/user-attachments/assets/0f8c887e-9dc0-427f-a12d-585485da3266
 
 ```typescript
 export interface CommandLog {
-  type: 'input' | 'output' | 'error' | 'success';
+  type: "input" | "output" | "error" | "success";
   text: string;
 }
 
 export type YieldChunk =
-  | { type: 'log'; log: CommandLog }
-  | { type: 'progress'; percent: number; text?: string };
+  | { type: "log"; log: CommandLog }
+  | { type: "progress"; percent: number; text?: string };
 
-export type CommandAction = (args: string[]) => AsyncGenerator<YieldChunk, void, unknown>;
+export type CommandAction = (
+  args: string[],
+) => AsyncGenerator<YieldChunk, void, unknown>;
 ```
 
 ---

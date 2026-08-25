@@ -1,17 +1,19 @@
-import React, { useState, useRef, useEffect, useMemo } from 'react';
-import { Terminal as TerminalIcon, CornerDownLeft, X } from 'lucide-react';
-import styles from './Terminal.module.css';
+import React, { useState, useRef, useEffect, useMemo } from "react";
+import { Terminal as TerminalIcon, CornerDownLeft, X } from "lucide-react";
+import styles from "./Terminal.module.css";
 
 export interface CommandLog {
-  type: 'input' | 'output' | 'error' | 'success';
+  type: "input" | "output" | "error" | "success";
   text: string;
 }
 
 export type YieldChunk =
-  | { type: 'log'; log: CommandLog }
-  | { type: 'progress'; percent: number; text?: string };
+  | { type: "log"; log: CommandLog }
+  | { type: "progress"; percent: number; text?: string };
 
-export type CommandAction = (args: string[]) => AsyncGenerator<YieldChunk, void, unknown>;
+export type CommandAction = (
+  args: string[],
+) => AsyncGenerator<YieldChunk, void, unknown>;
 
 interface HistoryEntry {
   id: number;
@@ -35,71 +37,77 @@ export interface TerminalTheme {
 /**
  * 組み込みプリセットの識別名
  */
-export type TerminalPreset = 'emerald' | 'matrix' | 'dracula' | 'amber' | 'cyberpunk' | 'light';
+export type TerminalPreset =
+  | "emerald"
+  | "matrix"
+  | "dracula"
+  | "amber"
+  | "cyberpunk"
+  | "light";
 
 /**
  * 組み込みプリセット定義
  */
 export const TERMINAL_PRESETS: Record<TerminalPreset, TerminalTheme> = {
   emerald: {
-    bg: 'rgba(9, 10, 15, 0.95)',
-    titleBg: '#0e1017',
-    border: 'rgba(16, 185, 129, 0.3)',
-    text: 'rgba(52, 211, 153, 0.9)',
-    prompt: '#10b981',
-    error: '#f87171',
-    success: '#6ee7b7',
-    progress: '#10b981',
+    bg: "rgba(9, 10, 15, 0.95)",
+    titleBg: "#0e1017",
+    border: "rgba(16, 185, 129, 0.3)",
+    text: "rgba(52, 211, 153, 0.9)",
+    prompt: "#10b981",
+    error: "#f87171",
+    success: "#6ee7b7",
+    progress: "#10b981",
   },
   matrix: {
-    bg: '#000000',
-    titleBg: '#051105',
-    border: '#00ff41',
-    text: '#00ff41',
-    prompt: '#00ff41',
-    error: '#ff0033',
-    success: '#00ff41',
-    progress: '#00ff41',
+    bg: "#000000",
+    titleBg: "#051105",
+    border: "#00ff41",
+    text: "#00ff41",
+    prompt: "#00ff41",
+    error: "#ff0033",
+    success: "#00ff41",
+    progress: "#00ff41",
   },
   dracula: {
-    bg: '#282a36',
-    titleBg: '#21222c',
-    border: '#6272a4',
-    text: '#f8f8f2',
-    prompt: '#50fa7b',
-    error: '#ff5555',
-    success: '#50fa7b',
-    progress: '#bd93f9',
+    bg: "#282a36",
+    titleBg: "#21222c",
+    border: "#6272a4",
+    text: "#f8f8f2",
+    prompt: "#50fa7b",
+    error: "#ff5555",
+    success: "#50fa7b",
+    progress: "#bd93f9",
   },
   amber: {
-    bg: '#1a0f00',
-    titleBg: '#2b1a00',
-    border: '#ffb000',
-    text: '#ffb000',
-    prompt: '#ffc107',
-    error: '#ff5252',
-    success: '#ffb000',
-    progress: '#ffb000',
+    bg: "#1a0f00",
+    titleBg: "#2b1a00",
+    border: "#ffb000",
+    text: "#ffb000",
+    prompt: "#ffc107",
+    error: "#ff5252",
+    success: "#ffb000",
+    progress: "#ffb000",
   },
   cyberpunk: {
-    bg: '#0d0f18',
-    titleBg: '#16192b',
-    border: '#00f0ff',
-    text: '#00f0ff',
-    prompt: '#ffe600',
-    error: '#ff0055',
-    success: '#00ff9f',
-    progress: '#ff0055',
+    bg: "#0d0f18",
+    titleBg: "#16192b",
+    border: "#00f0ff",
+    text: "#00f0ff",
+    prompt: "#ffe600",
+    error: "#ff0055",
+    success: "#00ff9f",
+    progress: "#ff0055",
   },
   light: {
-    bg: '#ffffff',
-    titleBg: '#f3f4f6',
-    border: '#e5e7eb',
-    text: '#1f2937',
-    prompt: '#059669',
-    error: '#dc2626',
-    success: '#059669',
-    progress: '#059669',
+    bg: "#ffffff",
+    titleBg: "#f3f4f6",
+    border: "#e5e7eb",
+    text: "#1f2937",
+    prompt: "#059669",
+    error: "#dc2626",
+    success: "#059669",
+    progress: "#059669",
   },
 };
 
@@ -107,10 +115,10 @@ export const TERMINAL_PRESETS: Record<TerminalPreset, TerminalTheme> = {
 const nextEntryId = (entries: HistoryEntry[]) =>
   entries.reduce((max, entry) => Math.max(max, entry.id), 0) + 1;
 
-const getLogClass = (type: CommandLog['type']) => {
-  if (type === 'input') return styles.logInput;
-  if (type === 'error') return styles.logError;
-  if (type === 'success') return styles.logSuccess;
+const getLogClass = (type: CommandLog["type"]) => {
+  if (type === "input") return styles.logInput;
+  if (type === "error") return styles.logError;
+  if (type === "success") return styles.logSuccess;
   return styles.logOutput;
 };
 
@@ -132,27 +140,27 @@ export interface TerminalProps {
 }
 
 export default function Terminal({
-  promptString = 'user@terminal:~$',
-  placeholder = 'Type a command...',
-  systemLockedText = 'System locked during execution...',
+  promptString = "user@terminal:~$",
+  placeholder = "Type a command...",
+  systemLockedText = "System locked during execution...",
   commandNotFoundFormatter = (cmd) => `Command not found: "${cmd}".`,
   initialHistory = [],
   commands,
-  title = 'terminal',
+  title = "terminal",
   showCloseButton = true,
   onClose,
   headerRightActions,
-  preset = 'emerald',
+  preset = "emerald",
   theme,
 }: TerminalProps) {
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState("");
   const [history, setHistory] = useState<HistoryEntry[]>(() =>
     initialHistory.map((log, index) => ({ id: index + 1, log })),
   );
 
   const [isSystemLocked, setIsSystemLocked] = useState(false);
   const [syncProgress, setSyncProgress] = useState<number | null>(null);
-  const [progressText, setProgressText] = useState('');
+  const [progressText, setProgressText] = useState("");
 
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -164,14 +172,14 @@ export default function Terminal({
     const finalTheme = { ...baseTheme, ...theme };
 
     return {
-      '--terminal-bg': finalTheme.bg,
-      '--terminal-title-bg': finalTheme.titleBg,
-      '--terminal-border': finalTheme.border,
-      '--terminal-text': finalTheme.text,
-      '--terminal-prompt': finalTheme.prompt,
-      '--terminal-error': finalTheme.error,
-      '--terminal-success': finalTheme.success,
-      '--terminal-progress': finalTheme.progress,
+      "--terminal-bg": finalTheme.bg,
+      "--terminal-title-bg": finalTheme.titleBg,
+      "--terminal-border": finalTheme.border,
+      "--terminal-text": finalTheme.text,
+      "--terminal-prompt": finalTheme.prompt,
+      "--terminal-error": finalTheme.error,
+      "--terminal-success": finalTheme.success,
+      "--terminal-progress": finalTheme.progress,
     } as React.CSSProperties;
   }, [preset, theme]);
 
@@ -189,11 +197,11 @@ export default function Terminal({
     if (!root) return;
     const handleTerminalClick = (event: MouseEvent) => {
       const target = event.target as HTMLElement | null;
-      if (target?.closest('button')) return;
+      if (target?.closest("button")) return;
       if (inputRef.current) inputRef.current.focus();
     };
-    root.addEventListener('click', handleTerminalClick);
-    return () => root.removeEventListener('click', handleTerminalClick);
+    root.addEventListener("click", handleTerminalClick);
+    return () => root.removeEventListener("click", handleTerminalClick);
   }, []);
 
   const handleCommand = async (e: React.FormEvent) => {
@@ -203,14 +211,17 @@ export default function Terminal({
 
     setHistory((prev) => [
       ...prev,
-      { id: nextEntryId(prev), log: { type: 'input', text: `${promptString} ${trimmedInput}` } },
+      {
+        id: nextEntryId(prev),
+        log: { type: "input", text: `${promptString} ${trimmedInput}` },
+      },
     ]);
-    setInput('');
+    setInput("");
 
-    const args = trimmedInput.split(' ');
+    const args = trimmedInput.split(" ");
     const primaryCmd = args[0].toLowerCase();
 
-    if (primaryCmd === 'clear') {
+    if (primaryCmd === "clear") {
       setHistory([]);
       return;
     }
@@ -221,9 +232,12 @@ export default function Terminal({
         const generator = commands[primaryCmd](args);
 
         for await (const chunk of generator) {
-          if (chunk.type === 'log') {
-            setHistory((prev) => [...prev, { id: nextEntryId(prev), log: chunk.log }]);
-          } else if (chunk.type === 'progress') {
+          if (chunk.type === "log") {
+            setHistory((prev) => [
+              ...prev,
+              { id: nextEntryId(prev), log: chunk.log },
+            ]);
+          } else if (chunk.type === "progress") {
             setSyncProgress(chunk.percent);
             if (chunk.text) setProgressText(chunk.text);
           }
@@ -233,31 +247,36 @@ export default function Terminal({
           ...prev,
           {
             id: nextEntryId(prev),
-            log: { type: 'error', text: `Execution error: ${err instanceof Error ? err.message : String(err)}` },
+            log: {
+              type: "error",
+              text: `Execution error: ${err instanceof Error ? err.message : String(err)}`,
+            },
           },
         ]);
       } finally {
         setIsSystemLocked(false);
         setSyncProgress(null);
-        setProgressText('');
+        setProgressText("");
       }
     } else {
       setHistory((prev) => [
         ...prev,
-        { id: nextEntryId(prev), log: { type: 'error', text: commandNotFoundFormatter(primaryCmd) } },
+        {
+          id: nextEntryId(prev),
+          log: { type: "error", text: commandNotFoundFormatter(primaryCmd) },
+        },
       ]);
     }
   };
 
   return (
-    <div
-      ref={rootRef}
-      className={styles.terminalRoot}
-      style={dynamicStyles}
-    >
+    <div ref={rootRef} className={styles.terminalRoot} style={dynamicStyles}>
       <div className={styles.titleBar}>
         <div className={styles.titleLeft}>
-          <TerminalIcon className="w-4 h-4" style={{ color: 'var(--terminal-prompt)' }} />
+          <TerminalIcon
+            className="w-4 h-4"
+            style={{ color: "var(--terminal-prompt)" }}
+          />
           <span className={styles.titleText}>{title}</span>
         </div>
         <div className={styles.titleRight}>
@@ -291,7 +310,10 @@ export default function Terminal({
               <span>{syncProgress}%</span>
             </div>
             <div className={styles.progressTrack}>
-              <div className={styles.progressBar} style={{ width: `${syncProgress}%` }} />
+              <div
+                className={styles.progressBar}
+                style={{ width: `${syncProgress}%` }}
+              />
             </div>
           </div>
         )}
@@ -311,7 +333,11 @@ export default function Terminal({
             autoCapitalize="off"
             spellCheck="false"
           />
-          <button type="submit" className={styles.submitButton} aria-label="Run command">
+          <button
+            type="submit"
+            className={styles.submitButton}
+            aria-label="Run command"
+          >
             <CornerDownLeft className="w-4 h-4" />
           </button>
         </form>

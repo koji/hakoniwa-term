@@ -1,7 +1,5 @@
-export { default as Terminal } from './Terminal';
-export {
-  TERMINAL_PRESETS,
-} from './Terminal';
+export { default as Terminal } from "./Terminal";
+export { TERMINAL_PRESETS } from "./Terminal";
 export type {
   TerminalProps,
   CommandLog,
@@ -9,4 +7,4 @@ export type {
   CommandAction,
   TerminalTheme,
   TerminalPreset,
-} from './Terminal';
+} from "./Terminal";

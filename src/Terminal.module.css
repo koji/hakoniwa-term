@@ -55,9 +55,14 @@
 
 .progressTrack {
   background-color: rgba(6, 78, 59, 0.4);
-  background-color: color-mix(in srgb, var(--terminal-progress) 20%, transparent);
+  background-color: color-mix(
+    in srgb,
+    var(--terminal-progress) 20%,
+    transparent
+  );
   border: 1px solid rgba(16, 185, 129, 0.2);
-  border: 1px solid color-mix(in srgb, var(--terminal-progress) 30%, transparent);
+  border: 1px solid
+    color-mix(in srgb, var(--terminal-progress) 30%, transparent);
 }
 
 .progressBar {
@@ -66,7 +71,8 @@
 
 .inputForm {
   border-top: 1px solid rgba(16, 185, 129, 0.1);
-  border-top: 1px solid color-mix(in srgb, var(--terminal-border) 40%, transparent);
+  border-top: 1px solid
+    color-mix(in srgb, var(--terminal-border) 40%, transparent);
 }
 
 .prompt {
@@ -101,7 +107,9 @@
   border-radius: 0.5rem;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   overflow: hidden;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-family:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace;
   font-size: 0.875rem;
   position: relative;
   z-index: 10;
