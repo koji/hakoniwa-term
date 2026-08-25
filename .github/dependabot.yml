@@ -1,0 +1,11 @@
+version: 2
+updates:
+  # GitHub Actions のコミット SHA ピン留め更新（バージョンコメントも併せて更新される）
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    groups:
+      github-actions:
+        patterns:
+          - "*"
