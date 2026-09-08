@@ -1,0 +1,28 @@
+
+> hakoniwa-term@0.0.6 build C:\Users\19172\Desktop\dev\hakoniwa-term
+> vite build
+
+1:38:46 AM [vite] warning: `esbuild` option was specified by "vite:react-babel" plugin. This option is deprecated, please use `oxc` instead.
+`optimizeDeps.rollupOptions` / `ssr.optimizeDeps.rollupOptions` is deprecated. Use `optimizeDeps.rolldownOptions` instead. Note that this option may be set by a plugin. Set VITE_DEPRECATION_TRACE=1 to see where it is called.
+[vite:react-babel] We recommend switching to `@vitejs/plugin-react-oxc` for improved performance. More information at https://vite.dev/rolldown
+[36mvite v8.1.3 [32mbuilding client environment for production...[36m[39m
+[2K
+transforming...Γ£ô 4 modules transformed.
+rendering chunks...
+[vite:dts] Start generate declaration files...
+[vite:dts] Start rollup declaration files...
+Analysis will use the bundled TypeScript version 5.9.3
+[vite:dts] Declaration files built in 2713ms.
+
+computing gzip size...
+dist/index.css  3.61 kB Γöé gzip: 1.06 kB
+dist/index.js   6.80 kB Γöé gzip: 2.44 kB
+
+[2K
+transforming...Γ£ô 4 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.css  3.61 kB Γöé gzip: 1.06 kB
+dist/index.cjs  5.59 kB Γöé gzip: 2.38 kB
+
+[32mΓ£ô built in 2.96s[39m

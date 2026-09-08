@@ -1,0 +1,46 @@
+# hakoniwa-term verify transcript
+# testName: shows progress text and percentage
+# command: pnpm vitest run src/Terminal.test.tsx -t shows progress text and percentage --reporter=verbose
+# exitCode: 0
+# durationMs: 5753
+# timestamp: 2026-09-08T05:38:36.271Z
+
+--- stdout ---
+
+ RUN  v4.1.11 C:/Users/19172/Desktop/dev/hakoniwa-term
+
+ ↓ src/Terminal.test.tsx > Terminal - rendering > renders the title text
+ ↓ src/Terminal.test.tsx > Terminal - rendering > renders initialHistory entries
+ ↓ src/Terminal.test.tsx > Terminal - rendering > renders the prompt string and custom placeholder
+ ↓ src/Terminal.test.tsx > Terminal - rendering > applies preset theme CSS variables to the root element
+ ↓ src/Terminal.test.tsx > Terminal - rendering > lets a custom theme override preset variables
+ ↓ src/Terminal.test.tsx > Terminal - rendering > renders headerRightActions inside the title bar
+ ↓ src/Terminal.test.tsx > Terminal - accessibility > gives the icon-only close and submit buttons accessible names
+ ↓ src/Terminal.test.tsx > Terminal - accessibility > focuses the input when clicking anywhere in the terminal body
+ ↓ src/Terminal.test.tsx > Terminal - command handling > echoes submitted commands into history with the prompt prefix and clears the field
+ ↓ src/Terminal.test.tsx > Terminal - command handling > does nothing when submitting an empty command
+ ↓ src/Terminal.test.tsx > Terminal - command handling > reports unknown commands through commandNotFoundFormatter
+ ↓ src/Terminal.test.tsx > Terminal - command handling > clears history when the built-in clear command runs
+ ↓ src/Terminal.test.tsx > Terminal - command handling > streams logs yielded by an async generator command
+ ✓ src/Terminal.test.tsx > Terminal - command handling > shows progress text and percentage while a command reports progress 329ms
+ ↓ src/Terminal.test.tsx > Terminal - system locking > disables input with systemLockedText while a command is executing
+ ↓ src/Terminal.test.tsx > Terminal - system locking > ignores submissions while locked
+ ↓ src/Terminal.test.tsx > Terminal - close button > calls onClose when the close button is clicked
+ ↓ src/Terminal.test.tsx > Terminal - close button > hides the close button when showCloseButton is false
+ ↓ src/Terminal.test.tsx > Terminal - close button > hides the close button when onClose is not provided
+ ↓ src/Terminal.test.tsx > Terminal - click behavior > keeps focusing the input after rerender
+ ↓ src/Terminal.test.tsx > Terminal - click behavior > stops click propagation from the close button so the terminal body does not refocus the input
+ ↓ src/Terminal.test.tsx > Terminal - click behavior > submits via the Run command button as well as Enter key
+ ↓ src/Terminal.test.tsx > Terminal - click behavior > handles rapid consecutive submissions
+
+ Test Files  1 passed (1)
+      Tests  1 passed | 22 skipped (23)
+   Start at  01:38:32
+   Duration  3.67s (transform 198ms, setup 507ms, import 378ms, tests 331ms, environment 1.48s)
+
+
+--- stderr ---
+[2m1:38:32 AM[22m [33m[1m[vite][22m[39m [33mwarning: `esbuild` option was specified by "vite:react-babel" plugin. This option is deprecated, please use `oxc` instead.[39m
+`optimizeDeps.rollupOptions` / `ssr.optimizeDeps.rollupOptions` is deprecated. Use `optimizeDeps.rolldownOptions` instead. Note that this option may be set by a plugin. Set VITE_DEPRECATION_TRACE=1 to see where it is called.
+[33mBoth esbuild and oxc options were set. oxc options will be used and esbuild options will be ignored.[39m The following esbuild options were set: `{ jsx: 'automatic', jsxImportSource: undefined }`
+[vite:react-babel] We recommend switching to `@vitejs/plugin-react-oxc` for improved performance. More information at https://vite.dev/rolldown
